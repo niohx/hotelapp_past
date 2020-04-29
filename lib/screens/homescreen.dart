@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hotelapp/common/appbar.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget{
+  @override 
+  _HomeScreenState createState()=> _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   void _launchyoutube() async {
     const url = 'https://youtube.com';
     if (await canLaunch(url)) {
@@ -13,6 +18,9 @@ class HomeScreen extends StatelessWidget {
   }
 
   final isVisible = true;
+  final _password = 'admin';
+  String _editedPassword;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,7 +82,40 @@ class HomeScreen extends StatelessWidget {
             trailing: IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/settings');
+                  showDialog(
+                    context: context,
+                    builder:(BuildContext context){
+                      return AlertDialog(
+                        title: Text('パスワードを入力してください'),
+                        content: TextField(
+                          onChanged: (value){
+                            _editedPassword = value;
+                          },
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            child: Text('submit'),
+                            onPressed:(){
+                              if(_editedPassword ==  _password){
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context,'/settings');
+                              }else{
+                                Navigator.pop(context);
+                              }
+                            }
+                            ),
+                          FlatButton(
+                            child: Text('cancel'),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
+
+                      );
+                    },
+                  );
+                  //Navigator.pushNamed(context, '/settings');
                 }),
           )
         ],
