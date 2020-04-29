@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
           '/second': (context) => SecondScreen(),
           '/agreement': (context) => Agreement(),
           '/settings': (context) => SettingPage(),
+          '/editsentense':(context)=>EditScreen(),
         },
         title: 'Flutter Demo',
         theme: mythemedata);

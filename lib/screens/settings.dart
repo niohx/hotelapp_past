@@ -12,6 +12,7 @@ class SettingPage extends StatelessWidget {
           SettingCard(
             text: Text('header settings'),
             subtitle: Text('最初の文章の設定'),
+            onTap:(){Navigator.pushNamed(context,'/editsentense');}
           ),
           SettingCard(
             text: Text('visibility settings'),
