@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hotelapp/common/appbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
-class HomeScreen extends StatefulWidget{
-  @override 
-  _HomeScreenState createState()=> _HomeScreenState();
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _mytext;
+  String _myPath;
+  bool isLogin = true;
+
+  void retrieveTextAndPath() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _myPath = prefs?.getString('imageplace');
+    _mytext = prefs?.getString('explanation');
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    retrieveTextAndPath();
+    super.initState();
+  }
+
   void _launchyoutube() async {
     const url = 'https://youtube.com';
     if (await canLaunch(url)) {
@@ -24,15 +43,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: generalappbar,
+      appBar: new AppBar(
+        title: Text('welcome'),
+      ),
       body: ListView(
         children: <Widget>[
           //トップへ？
-          Center(
-              child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                      'ようこそ伊勢屋へ！\n\n free-wifi \n SSID:iseya-free-wifi '))),
+          Container(
+              padding: EdgeInsets.all(10.0),
+              child: Row(children: <Widget>[
+                (_myPath != null)
+                    ? SizedBox(
+                        height: 200.0,
+                        width: 200.0,
+                        child: Image.file(File(_myPath)))
+                    : Container(),
+                Text('$_mytext'),
+              ])),
           Card(
             child: ListTile(
               leading: Icon(Icons.alarm),
@@ -79,42 +106,52 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           ListTile(
+            leading: Icon(Icons.access_time),
+            onTap: () {
+              retrieveTextAndPath();
+              print(_mytext);
+              print(_myPath);
+              setState(() {});
+            },
             trailing: IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder:(BuildContext context){
-                      return AlertDialog(
-                        title: Text('パスワードを入力してください'),
-                        content: TextField(
-                          onChanged: (value){
-                            _editedPassword = value;
-                          },
-                        ),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('submit'),
-                            onPressed:(){
-                              if(_editedPassword ==  _password){
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context,'/settings');
-                              }else{
-                                Navigator.pop(context);
-                              }
-                            }
-                            ),
-                          FlatButton(
-                            child: Text('cancel'),
-                            onPressed: (){
-                              Navigator.pop(context);
+                  if (isLogin) {
+                    Navigator.pushNamed(context, '/settings');
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('パスワードを入力してください'),
+                          content: TextField(
+                            onChanged: (value) {
+                              _editedPassword = value;
                             },
-                          )
-                        ],
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                                child: Text('submit'),
+                                onPressed: () {
+                                  if (_editedPassword == _password) {
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, '/settings');
+                                  } else {
+                                    Navigator.pop(context);
+                                  }
+                                }),
+                            FlatButton(
+                              child: Text('cancel'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  }
 
-                      );
-                    },
-                  );
                   //Navigator.pushNamed(context, '/settings');
                 }),
           )

@@ -37,18 +37,18 @@ class _EditScreenState extends State<EditScreen> {
 
   String _mytext;
   final TextEditingController _controller = TextEditingController();
-
+  //セーブするやつ
   Future<void> _saveImageAndText(File _image, String _text) async {
-    if (_image == null) { return;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (_image == null) {
+      print('null is true');
+      prefs.setString('explanation', _text);
+      prefs.remove('imageplace');
     } else {
-      Directory path = await getApplicationDocumentsDirectory();
-      String pathName = path.path;
-      var fileName = basename(_image.path);
-      _image.copy('$pathName/$fileName');
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('imageplace', pathName);
-      prefs.setString('explaination', _text);
-      print(_text);
+      String path = _image.path;
+
+      prefs.setString('imageplace', path);
+      prefs.setString('explanation', _text);
     }
   }
 
@@ -79,7 +79,7 @@ class _EditScreenState extends State<EditScreen> {
               SizedBox(height: 20),
               TextFormField(
                 controller: _controller,
-                onChanged: (value){
+                onChanged: (value) {
                   _mytext = value;
                 },
                 maxLines: null,
@@ -91,18 +91,18 @@ class _EditScreenState extends State<EditScreen> {
           ),
         )),
       ),
-      floatingActionButton:
-          FloatingActionButton(onPressed: () {
-            print(_mytext);
-            _saveImageAndText(_image, _mytext);
-            
-            setState((){
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _saveImageAndText(_image, _mytext);
               _image = null;
               _mytext = null;
               _controller.clear();
+              
             });
-
-          }, child: Icon(Icons.sync)),
+            Navigator.pushReplacementNamed(context,'/');
+          },
+          child: Icon(Icons.sync)),
     );
   }
 }

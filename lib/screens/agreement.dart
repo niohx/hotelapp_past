@@ -3,7 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:hotelapp/common/appbar.dart';
 
 class Agreement extends StatelessWidget {
-  WebViewController _controller;
+  //WebViewController _controller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +12,7 @@ class Agreement extends StatelessWidget {
         initialUrl: 'https://google.com',
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (WebViewController controller) {
-          _controller = controller;
+          //_controller = controller;
         },
       ),
     );
