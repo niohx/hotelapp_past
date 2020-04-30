@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hotelapp/common/appbar.dart';
+import 'package:system_settings/system_settings.dart';
 
 class SettingPage extends StatelessWidget {
   @override
@@ -28,7 +29,13 @@ class SettingPage extends StatelessWidget {
           SettingCard(
             text:Text('Agreement Settings'),
             subtitle: Text('宿泊約款URLの登録'),
+          ),
+          SettingCard(
+            text:Text('携帯の設定画面へ'),
+            subtitle: Text('こちらからホーム画面の解除は出来ます。'),
+            onTap:SystemSettings.app,
           )
+
         ],
       ),
     );
