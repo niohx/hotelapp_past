@@ -19,20 +19,20 @@ final settingdrawer = Drawer(
   ),
 );
 
-/*class SettingAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback onTap;
-  final AppBar appBar;
-
-  const SettingAppBar({Key key, this.onTap,this.appBar}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return  GestureDetector(
-      onTap:(){},
-    child: AppBar(title:Text('伊勢屋')));
+class SettingDrawer extends StatelessWidget{
+  Widget build(BuildContext context){
+    Drawer(
+  child: ListView(
+    padding: EdgeInsets.zero,
+    children: <Widget>[
+      ListTile(title: Text('header setting'),),
+      ListTile(title: Text('alarm setting'),),
+      ListTile(title: Text('youtube setting'),),
+      ListTile(title: Text('recomendation setting'),),
+      ListTile(title: Text('Agreement setting'),),
+      
+    ],
+  ),
+);
   }
-
-  // TODO: implement preferredSize
-  @override
-  Size get preferredSize => new Size.fromHeight(kToolbarHeight);
-}*/
+}

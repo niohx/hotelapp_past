@@ -4,8 +4,11 @@ import 'package:hotelapp/screens/secondscreen.dart';
 import 'package:hotelapp/screens/agreement.dart';
 import 'package:hotelapp/screens/settings.dart';
 import 'package:hotelapp/common/themedata.dart';
+import 'package:provider/provider.dart';
+import 'package:hotelapp/models/appmodel.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+    ChangeNotifierProvider<AppModel>(create: (context) => AppModel(), child: MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
@@ -15,10 +18,9 @@ class MyApp extends StatelessWidget {
         routes: {
           //お客様用画面のルーティング
           '/': (context) => HomeScreen(),
-          '/second': (context) => SecondScreen(),
           '/agreement': (context) => Agreement(),
           '/settings': (context) => SettingPage(),
-          '/editsentense':(context)=>EditScreen(),
+          '/editsentense': (context) => EditScreen(),
         },
         title: 'Flutter Demo',
         theme: mythemedata);

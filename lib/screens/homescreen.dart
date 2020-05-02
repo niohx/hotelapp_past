@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hotelapp/common/appbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hotelapp/models/appmodel.dart';
 import 'dart:io';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,19 +14,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String _mytext;
   String _myPath;
   bool isLogin = true;
-
-  void retrieveTextAndPath() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _myPath = prefs?.getString('imageplace');
-    _mytext = prefs?.getString('explanation');
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    retrieveTextAndPath();
-    super.initState();
-  }
 
   void _launchyoutube() async {
     const url = 'https://youtube.com';
@@ -51,15 +39,19 @@ class _HomeScreenState extends State<HomeScreen> {
           //トップへ？
           Container(
               padding: EdgeInsets.all(10.0),
-              child: Row(children: <Widget>[
-                (_myPath != null)
+              child: Consumer<AppModel>(
+                builder:(context,appmodel,child){
+                return Row(children: <Widget>[
+                (appmodel.path != null)
                     ? SizedBox(
                         height: 200.0,
                         width: 200.0,
-                        child: Image.file(File(_myPath)))
+                        child: Image.file(File(appmodel.path)))
                     : Container(),
-                Text('$_mytext'),
-              ])),
+                Text('${appmodel.explanation}'),
+              ]);}
+              )
+              ),
           Card(
             child: ListTile(
               leading: Icon(Icons.alarm),
@@ -107,12 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           ListTile(
             leading: Icon(Icons.access_time),
-            onTap: () {
-              retrieveTextAndPath();
-              print(_mytext);
-              print(_myPath);
-              setState(() {});
-            },
+            onTap:(){},
             trailing: IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {

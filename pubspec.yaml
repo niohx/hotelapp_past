@@ -26,6 +26,7 @@ dependencies:
   path_provider: ^1.6.7
   shared_preferences: ^0.5.7
   path: ^1.6.4
+  provider: ^4.0.5+1
   #firebase_core: ^0.2.5
   #firebase_analytics: ^1.0.4
 
