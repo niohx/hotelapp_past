@@ -11,8 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String _mytext;
-  String _myPath;
+  //String _mytext;
+  //String _myPath;
   bool isLogin = true;
 
   void _launchyoutube() async {
@@ -42,11 +42,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Consumer<AppModel>(
                 builder:(context,appmodel,child){
                 return Row(children: <Widget>[
-                (appmodel.path != null)
+                (appmodel.imgpath != null)
                     ? SizedBox(
                         height: 200.0,
                         width: 200.0,
-                        child: Image.file(File(appmodel.path)))
+                        child: Image.file(File(appmodel.imgpath)))
                     : Container(),
                 Text('${appmodel.explanation}'),
               ]);}
