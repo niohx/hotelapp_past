@@ -63,7 +63,7 @@ class _EditScreenState extends State<EditScreen> {
               TextFormField(
                 controller: _controller,
                 onChanged: (value) {
-                  _text = value;
+                                    _text = value;
                 },
                 maxLines: null,
                 decoration: InputDecoration(
@@ -78,12 +78,12 @@ class _EditScreenState extends State<EditScreen> {
           onPressed: () {
             if (_file != null) {
               appmodel.saveExplanation(_text);
-              _controller.clear();
+              
               Navigator.pushReplacementNamed(context, '/');
             } else{
               appmodel.saveExplanation(_text);
               appmodel.saveImagePlace(_file);
-              _controller.clear();
+              
               Navigator.pushReplacementNamed(context, '/');
             }
           },

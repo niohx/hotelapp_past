@@ -19,6 +19,7 @@ class AppModel with ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     imgpath = _prefs.getString('imageplace') ?? null;
     explanation = _prefs.getString('explanation') ?? null;
+    print(explanation);
     
   }
 
