@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:hotelapp/models/appmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -26,65 +25,66 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   String _text;
   File _file;
-  GlobalKey _globalKey = GlobalKey();
+  //GlobalKey _globalKey = GlobalKey();
   final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     AppModel appmodel = Provider.of<AppModel>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Top Page Context'),
       ),
-      body:SingleChildScrollView(
-            child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              /*_file == null
-                  ? Container()
-                  : SizedBox(
-                      width: 150.0,
-                      height: 200.0,
-                      child: Image.file(File(appmodel.imgpath))),*/
-              RaisedButton.icon(
-                icon: Icon(Icons.add_a_photo),
-                label: Text('写真の追加'),
-                onPressed: () {
-                  appmodel.getImage().then((image) {
-                    _file = image;
-                  });
-                  setState((){});
-                },
+      body: SingleChildScrollView(
+          child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _file == null
+                ? Container()
+                : SizedBox(
+                    width: 150.0,
+                    height: 200.0,
+                    child: Image.file(_file)),
+            RaisedButton.icon(
+              icon: Icon(Icons.add_a_photo),
+              label: Text('写真の追加'),
+              onPressed: () {
+                appmodel.getImage().then((image) {
+                  _file = image;
+                  
+                });
+                
+                setState(() {});
+              },
+            ),
+            Text('文章'),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: _controller,
+              onChanged: (value) {
+                _text = value;
+              },
+              maxLines: null,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
               ),
-              Text('文章'),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: _controller,
-                onChanged: (value) {
-                                    _text = value;
-                },
-                maxLines: null,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ],
-          ),
-        )),
-      
+            ),
+          ],
+        ),
+      )),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            if (_file != null) {
+            if (_file == null) {
               appmodel.saveExplanation(_text);
-              
-              Navigator.pushReplacementNamed(context, '/');
-            } else{
+
+              Navigator.pushNamed(context, '/');
+            } else {
               appmodel.saveExplanation(_text);
-              appmodel.saveImagePlace(_file);
-              
-              Navigator.pushReplacementNamed(context, '/');
+              appmodel.saveImage(_file);
+
+              Navigator.pushNamed(context, '/');
             }
           },
           child: Icon(Icons.sync)),

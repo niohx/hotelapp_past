@@ -2,8 +2,9 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
-class AppModel with ChangeNotifier {
+class AppModel extends ChangeNotifier {
   SharedPreferences _prefs;
   String imgpath;
   String explanation;
@@ -11,23 +12,24 @@ class AppModel with ChangeNotifier {
 
   //constructor read value from shared preferences.
   AppModel() {
-    readSettingData();
+    readAndSetData();
   }
   //constructor (separete to its own).
-  void readSettingData() async {
-    print('reading begins');
+  void readAndSetData() async {
     _prefs = await SharedPreferences.getInstance();
     imgpath = _prefs.getString('imageplace') ?? null;
     explanation = _prefs.getString('explanation') ?? null;
-    print(explanation);
-    
+    notifyListeners();
   }
 
   //save directory of the image.
-  void saveImagePlace(File img) {
-    
-    //_prefs.setString('imageplace', img.path);
-    print((explanation != null) ? explanation : 'no explanation');
+  void saveImage(File img) async {
+    Directory _direcotry = await getApplicationDocumentsDirectory();
+    String path = _direcotry.path;
+    print('$path');
+    img.copy('$path/img.png');
+    _prefs.setString('imageplace', '$path/img.png');
+        
     notifyListeners();
   }
 
@@ -35,13 +37,17 @@ class AppModel with ChangeNotifier {
   void saveExplanation(String text) {
     
     _prefs.setString('explanation', text);
+    
     notifyListeners();
   }
 
   //retreive image from image picker.
-  Future getImage() async {
+  Future<File> getImage() async {
+    print('getting images..');
     img = await ImagePicker.pickImage(source: ImageSource.gallery);
-    //notifyListeners();
+    print(img.path);
+    
+    notifyListeners();
     return img;
   }
 }

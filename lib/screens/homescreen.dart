@@ -5,12 +5,7 @@ import 'package:hotelapp/models/appmodel.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreen extends StatelessWidget {
   //String _mytext;
   //String _myPath;
   bool isLogin = true;
@@ -36,22 +31,23 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ListView(
         children: <Widget>[
-          //トップへ？
+          //ここが再描画されてくれない
           Container(
               padding: EdgeInsets.all(10.0),
-              child: Consumer<AppModel>(
-                builder:(context,appmodel,child){
+              child: Consumer<AppModel>(builder: (context, appmodel, child) {
                 return Row(children: <Widget>[
-                /*(appmodel.imgpath != null)
-                    ? SizedBox(
-                        height: 200.0,
-                        width: 200.0,
-                        child: Image.file(File(appmodel.imgpath)))
-                    : Container(),*/
-                Text('${appmodel.explanation}'),
-              ]);}
-              )
-              ),
+                  (appmodel.imgpath != null)
+                      ? SizedBox(
+                          height: 200.0,
+                          width: 200.0,
+                          child: Image.file(File(appmodel.imgpath)))
+                      : Container(),
+                  (appmodel.explanation != null)
+                      ? Text('${appmodel.explanation}')
+                      : Container(),
+                ]);
+              })),
+
           Card(
             child: ListTile(
               leading: Icon(Icons.alarm),
@@ -99,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           ListTile(
             leading: Icon(Icons.access_time),
-            onTap:(){},
+            onTap: () {},
             trailing: IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
