@@ -5,19 +5,25 @@ import 'package:flutter/foundation.dart';
 
 class AppModel with ChangeNotifier {
   SharedPreferences _prefs;
+
+  //最初の画像と文章用
   String imgpath;
   String explanation;
   File img;
 
-  //constructor (separete to its own).
-  Future<Map<String, String>> readSettingData() async {
-    //  print('reading begins');
+  //カードを表示させるかどうか
+  AppVisibility appVisibility;
+  
+  //constructor
+  Future<Map<String, Map>> readSettingData() async {
+    //最初の画像と文章のロード
     _prefs = await SharedPreferences.getInstance();
     imgpath = _prefs.getString('imageplace') ?? null;
     explanation = _prefs.getString('explanation') ?? null;
-    //print(imgpath + " & " + explanation);
-
-    return {"imagepath": imgpath, "explanation": explanation};
+    appVisibility = new AppVisibility();
+    
+    return {"firstData":{"imagepath": imgpath, "explanation": explanation},
+            };
   }
 
   //save directory of the image.
@@ -39,4 +45,28 @@ class AppModel with ChangeNotifier {
     return img;
     //notifyListeners();
   }
+}
+
+//使うかどうかわかんない
+class AppVisibility {
+
+  bool alarmclock ;
+  bool youtube ;
+  bool recomendation ;
+  bool menu;
+  bool agreement;
+
+  SharedPreferences _prefs;
+
+  AppVisibility(){getVisibility();}
+
+  Future<void> getVisibility() async{
+    _prefs = await SharedPreferences.getInstance() ;
+    youtube = _prefs.getBool('youtube') ?? true;
+    alarmclock = _prefs.getBool('alarmclock') ?? true;
+    recomendation = _prefs.getBool('recomendation') ?? true;
+    menu = _prefs.getBool('menu') ?? true;
+    agreement = _prefs.getBool('agreement') ?? true;
+    }
+  
 }
