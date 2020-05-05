@@ -15,12 +15,12 @@ class _HomeScreenState extends State<HomeScreen> {
   //String _myPath;
   bool isLogin = true;
 
-  void _launchyoutube() async {
-    const url = 'https://youtube.com';
-    if (await canLaunch(url)) {
-      await launch(url);
+   _launchyoutube(url) async {
+    String _url = url;
+    if (await canLaunch(_url)) {
+      await launch(_url);
     } else {
-      throw 'coud not open $url';
+      throw 'coud not open $_url';
     }
   }
 
@@ -35,8 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     AppModel appmodel = Provider.of<AppModel>(context);
-    print('now building' +
-        ' ${appmodel.explanation} and ${appmodel?.imgpath} is great for it');
     appmodel.readSettingData();
     return Scaffold(
       appBar: new AppBar(
@@ -44,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ListView(
         children: <Widget>[
-          //トップへ？
           Container(
               padding: EdgeInsets.all(10.0),
 //Consumer Pattern
@@ -66,20 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
               child: FutureBuilder(
                   future: appmodel.readSettingData(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<Map<String, String>> snapshot) {
+                      AsyncSnapshot<Map<String, Map>> snapshot) {
                     if (snapshot.connectionState != ConnectionState.done) {
                       return CircularProgressIndicator();
                     } else {
                       return Row(
                         children: <Widget>[
-                          if (snapshot.data["explanation"] != null)
-                            Text(snapshot.data['explanation']),
-                          if (snapshot.data["imagepath"] != null)
+                          if (snapshot.data["firstData"]['imagepath'] != null)
                             SizedBox(
                               height: 200.0,
                               width: 200.0,
-                              child: Image.file(File(snapshot.data['imagepath'])),
-                            )
+                              child:
+                                  Image.file(File(snapshot.data['firstData']['imagepath'])),
+                            ),
+                          if (snapshot.data['firstData']["explanation"] != null)
+                            Text(snapshot.data['firstData']['explanation']),
                         ],
                       );
                     }
@@ -109,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: Icon(Icons.video_library),
               title: Text('Youtube'),
               subtitle: Text('Youtubeアプリが開きます。'),
-              onTap: _launchyoutube,
+              onTap: _launchyoutube('http://www.youtube.co.jp'),
             ),
           ),
           Card(
