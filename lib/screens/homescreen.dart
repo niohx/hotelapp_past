@@ -72,13 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     } else {
                       return Row(
                         children: <Widget>[
-                          if (appmodel.explanation != null)
+                          if (snapshot.data["explanation"] != null)
                             Text(snapshot.data['explanation']),
-                          if (appmodel.imgpath != null)
+                          if (snapshot.data["imagepath"] != null)
                             SizedBox(
                               height: 200.0,
                               width: 200.0,
-                              child: Image.file(File(snapshot.data['imgpath'])),
+                              child: Image.file(File(snapshot.data['imagepath'])),
                             )
                         ],
                       );

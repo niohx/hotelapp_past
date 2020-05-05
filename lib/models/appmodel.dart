@@ -9,24 +9,19 @@ class AppModel with ChangeNotifier {
   String explanation;
   File img;
 
-   
   //constructor (separete to its own).
-  Future<Map<String,String>> readSettingData() async {
-  //  print('reading begins');
+  Future<Map<String, String>> readSettingData() async {
+    //  print('reading begins');
     _prefs = await SharedPreferences.getInstance();
     imgpath = _prefs.getString('imageplace') ?? null;
     explanation = _prefs.getString('explanation') ?? null;
+    //print(imgpath + " & " + explanation);
 
-    return {"imagepath":imgpath,"explanation":explanation};
-
-    //notifyListeners();
-    
-    
+    return {"imagepath": imgpath, "explanation": explanation};
   }
 
   //save directory of the image.
   void saveImagePlace(File img) async {
-    
     await _prefs.setString('imageplace', img.path);
     print((explanation != null) ? explanation : 'no explanation');
     notifyListeners();
@@ -34,8 +29,7 @@ class AppModel with ChangeNotifier {
 
   //save explanation
   void saveExplanation(String text) async {
-    
-    await _prefs.setString('explanation', text) ;
+    await _prefs.setString('explanation', text);
     notifyListeners();
   }
 
@@ -44,6 +38,5 @@ class AppModel with ChangeNotifier {
     img = await ImagePicker.pickImage(source: ImageSource.gallery);
     return img;
     //notifyListeners();
-    
   }
 }
