@@ -5,7 +5,12 @@ import 'package:hotelapp/models/appmodel.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   //String _mytext;
   //String _myPath;
   bool isLogin = true;
@@ -22,32 +27,63 @@ class HomeScreen extends StatelessWidget {
   final isVisible = true;
   final _password = 'admin';
   String _editedPassword;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    AppModel appmodel = Provider.of<AppModel>(context);
+    print('now building' +
+        ' ${appmodel.explanation} and ${appmodel?.imgpath} is great for it');
+    appmodel.readSettingData();
     return Scaffold(
       appBar: new AppBar(
         title: Text('welcome'),
       ),
       body: ListView(
         children: <Widget>[
-          //ここが再描画されてくれない
+          //トップへ？
           Container(
               padding: EdgeInsets.all(10.0),
-              child: Consumer<AppModel>(builder: (context, appmodel, child) {
+//Consumer Pattern
+/*              child: Consumer<AppModel>(
+                builder:(context,appmodel,child){
                 return Row(children: <Widget>[
-                  (appmodel.imgpath != null)
-                      ? SizedBox(
-                          height: 200.0,
-                          width: 200.0,
-                          child: Image.file(File(appmodel.imgpath)))
-                      : Container(),
-                  (appmodel.explanation != null)
-                      ? Text('${appmodel.explanation}')
-                      : Container(),
-                ]);
-              })),
-
+                (appmodel.imgpath != null)
+                    ? SizedBox(
+                        height: 200.0,
+                        width: 200.0,
+                        child: Image.file(File(appmodel.imgpath)))
+                    : Container(),
+                Text('${appmodel.explanation}'),
+                
+              ]);}
+              )
+*/
+//using Provider.of<AppModel>(context) pattern
+              child: FutureBuilder(
+                  future: appmodel.readSettingData(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<Map<String, String>> snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return CircularProgressIndicator();
+                    } else {
+                      return Row(
+                        children: <Widget>[
+                          if (appmodel.explanation != null)
+                            Text(snapshot.data['explanation']),
+                          if (appmodel.imgpath != null)
+                            SizedBox(
+                              height: 200.0,
+                              width: 200.0,
+                              child: Image.file(File(snapshot.data['imgpath'])),
+                            )
+                        ],
+                      );
+                    }
+                  })),
           Card(
             child: ListTile(
               leading: Icon(Icons.alarm),

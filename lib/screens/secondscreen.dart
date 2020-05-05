@@ -25,7 +25,6 @@ class EditScreen extends StatefulWidget {
 class _EditScreenState extends State<EditScreen> {
   String _text;
   File _file;
-  //GlobalKey _globalKey = GlobalKey();
   final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -41,22 +40,21 @@ class _EditScreenState extends State<EditScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _file == null
-                ? Container()
-                : SizedBox(
-                    width: 150.0,
-                    height: 200.0,
-                    child: Image.file(_file)),
+            if (_file != null)
+              SizedBox(
+                width: 150.0,
+                height: 200.0,
+                child: Image.file(_file),
+              ),
             RaisedButton.icon(
               icon: Icon(Icons.add_a_photo),
               label: Text('写真の追加'),
               onPressed: () {
-                appmodel.getImage().then((image) {
-                  _file = image;
-                  
+                appmodel.getImage().then((e) {
+                  _file = e;
+                  setState((){});
                 });
-                
-                setState(() {});
+
               },
             ),
             Text('文章'),
@@ -78,14 +76,11 @@ class _EditScreenState extends State<EditScreen> {
           onPressed: () {
             if (_file == null) {
               appmodel.saveExplanation(_text);
-
-              Navigator.pushNamed(context, '/');
             } else {
               appmodel.saveExplanation(_text);
-              appmodel.saveImage(_file);
-
-              Navigator.pushNamed(context, '/');
+              appmodel.saveImagePlace(_file);
             }
+            Navigator.popUntil(context, ModalRoute.withName("/"));
           },
           child: Icon(Icons.sync)),
     );
